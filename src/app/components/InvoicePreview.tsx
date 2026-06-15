@@ -91,11 +91,12 @@ export default function InvoicePreview({ data }: Props) {
         Goods sold are not returnable / Barang yang dijual tidak boleh dikembalikan
       </div>
 
+      <div className="inv-stamp-wrap">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={STORE_STAMP_DATA_URL} alt="store stamp" className="inv-stamp" />
+      </div>
+
       <div className="inv-footer">
-        <div className="inv-stamp-wrap">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={STORE_STAMP_DATA_URL} alt="store stamp" className="inv-stamp" />
-        </div>
         <div className="inv-sigs">
           <div className="inv-sig">
             {data.receivedByName && (
