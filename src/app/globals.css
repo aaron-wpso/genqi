@@ -111,7 +111,7 @@ body {
 .inv-sig-line   { border-top: 1px solid #333; }
 .inv-sig-label  { font-size: 13px; color: #555; }
 .inv-stamp-wrap { display: flex; justify-content: flex-start; align-items: center; padding: 18px 0 10px 20px; }
-.inv-stamp      { width: 240px; transform: rotate(-9deg); opacity: 0.9; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.inv-stamp      { width: 240px; opacity: 0.9; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .inv-sig-filled { font-size: 18px; font-weight: 600; color: #111; padding-bottom: 2px; }
 .inv-sig-date   { font-size: 13px; color: #555; font-weight: 400; }
 .inv-sig-img    { max-height: 64px; max-width: 100%; object-fit: contain; margin-bottom: 4px; }
