@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { InvoiceData, LineItem, SKUS, SkuKey } from '@/lib/invoice';
+import { DEFAULT_INVOICE, InvoiceData, LineItem, SKUS, SkuKey, EMPTY_LINE_ITEM } from '@/lib/invoice';
 
 interface Props {
   data: InvoiceData;
@@ -37,6 +37,22 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
     reader.readAsDataURL(file);
   }
 
+  function clearHeader() {
+    onChange({ ...data, sku: DEFAULT_INVOICE.sku, no: '', customerName: '', date: '' });
+  }
+
+  function clearItems() {
+    onChange({ ...data, items: [EMPTY_LINE_ITEM, EMPTY_LINE_ITEM, EMPTY_LINE_ITEM, EMPTY_LINE_ITEM, EMPTY_LINE_ITEM] });
+  }
+
+  function clearSignature() {
+    set('signatureDataUrl', '');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+
+  function clearReceivedBy() {
+    onChange({ ...data, receivedByName: '', receivedByDate: '' });
+  }
 
   return (
     <div className="no-print bg-white rounded-lg shadow-md px-6 py-4 w-full max-w-[794px] flex flex-wrap gap-x-6 gap-y-3 items-end">
@@ -44,31 +60,35 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
         Edit Invoice
       </h3>
 
-      {/* ── Invoice header fields ── */}
-      <Field label="SKU">
-        <select className="input" value={data.sku} onChange={e => applySku(e.target.value as SkuKey)}>
-          <option value="full">Full Body — RM 198</option>
-          <option value="half">Half Body — RM 131</option>
-        </select>
-      </Field>
+      {/* ── Invoice Details ── */}
+      <div className="w-full">
+        <SectionHeader label="Invoice Details" onClear={clearHeader} />
+        <div className="flex flex-wrap gap-x-6 gap-y-3 items-end mt-2">
+          <Field label="SKU">
+            <select className="input" value={data.sku} onChange={e => applySku(e.target.value as SkuKey)}>
+              <option value="full">Full Body — RM 198</option>
+              <option value="half">Half Body — RM 131</option>
+            </select>
+          </Field>
 
-      <Field label="Invoice No.">
-        <input className="input w-[120px]" value={data.no} onChange={e => set('no', e.target.value)} />
-      </Field>
+          <Field label="Invoice No.">
+            <input className="input w-[120px]" value={data.no} onChange={e => set('no', e.target.value)} />
+          </Field>
 
-      <Field label="Customer (M/S)">
-        <input className="input w-[180px]" placeholder="Customer name" value={data.customerName} onChange={e => set('customerName', e.target.value)} />
-      </Field>
+          <Field label="Customer (M/S)">
+            <input className="input w-[180px]" placeholder="Customer name" value={data.customerName} onChange={e => set('customerName', e.target.value)} />
+          </Field>
 
-      <Field label="Date">
-        <input className="input" type="date" value={data.date} onChange={e => set('date', e.target.value)} />
-      </Field>
+          <Field label="Date">
+            <input className="input" type="date" value={data.date} onChange={e => set('date', e.target.value)} />
+          </Field>
+        </div>
+      </div>
 
-      {/* ── Items (all 5 rows) ── */}
+      {/* ── Items ── */}
       <div className="w-full border-t border-gray-100 pt-3">
-        <p className="text-[10px] uppercase tracking-wide text-gray-400 font-semibold mb-2">Items</p>
-        <div className="flex flex-col gap-2">
-          {/* Column headers */}
+        <SectionHeader label="Items" onClear={clearItems} />
+        <div className="flex flex-col gap-2 mt-2">
           <div className="flex gap-x-3 items-end pl-6">
             <span className="text-[10px] uppercase tracking-wide text-gray-400 font-semibold w-[240px]">Description</span>
             <span className="text-[10px] uppercase tracking-wide text-gray-400 font-semibold w-[70px]">Qty</span>
@@ -105,12 +125,10 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
         </div>
       </div>
 
-      {/* ── Divider ── */}
-      <div className="w-full border-t border-gray-100 mt-1" />
-
-      {/* ── Signature ── */}
-      <Field label="Authorised Signature Image">
-        <div className="flex items-center gap-2">
+      {/* ── Authorised Signature ── */}
+      <div className="w-full border-t border-gray-100 pt-3">
+        <SectionHeader label="Authorised Signature" onClear={clearSignature} />
+        <div className="flex items-center gap-2 mt-2">
           <input
             ref={fileInputRef}
             type="file"
@@ -119,23 +137,23 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
             className="text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-600 hover:file:bg-gray-200 cursor-pointer"
           />
           {data.signatureDataUrl && (
-            <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={data.signatureDataUrl} alt="signature preview" className="h-8 w-auto rounded border border-gray-200" />
-              <button onClick={() => { set('signatureDataUrl', ''); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="text-xs text-red-400 hover:text-red-600">✕</button>
-            </>
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={data.signatureDataUrl} alt="signature preview" className="h-8 w-auto rounded border border-gray-200" />
           )}
         </div>
-      </Field>
+      </div>
 
-      {/* ── Received by — own full-width row ── */}
-      <div className="w-full flex flex-wrap gap-x-6 gap-y-3 items-end border-t border-gray-100 pt-3">
-        <Field label="Received By (Name)">
-          <input className="input w-[220px]" placeholder="Name" value={data.receivedByName} onChange={e => set('receivedByName', e.target.value)} />
-        </Field>
-        <Field label="Received By (Date)">
-          <input className="input" type="date" value={data.receivedByDate} onChange={e => set('receivedByDate', e.target.value)} />
-        </Field>
+      {/* ── Received By ── */}
+      <div className="w-full border-t border-gray-100 pt-3">
+        <SectionHeader label="Received By" onClear={clearReceivedBy} />
+        <div className="flex flex-wrap gap-x-6 gap-y-3 items-end mt-2">
+          <Field label="Name">
+            <input className="input w-[220px]" placeholder="Name" value={data.receivedByName} onChange={e => set('receivedByName', e.target.value)} />
+          </Field>
+          <Field label="Date">
+            <input className="input" type="date" value={data.receivedByDate} onChange={e => set('receivedByDate', e.target.value)} />
+          </Field>
+        </div>
       </div>
 
       {/* ── Print ── */}
@@ -144,6 +162,21 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
           🖨 Print / Save PDF
         </button>
       </div>
+    </div>
+  );
+}
+
+function SectionHeader({ label, onClear }: { label: string; onClear: () => void }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-[10px] uppercase tracking-wide text-gray-400 font-semibold">{label}</span>
+      <button
+        onClick={onClear}
+        title={`Clear ${label}`}
+        className="w-5 h-5 flex items-center justify-center rounded text-gray-400 hover:bg-red-50 hover:text-red-400 transition-colors text-xs font-bold leading-none"
+      >
+        ✕
+      </button>
     </div>
   );
 }
