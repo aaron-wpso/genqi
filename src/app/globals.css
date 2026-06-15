@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .input {
+    @apply border border-gray-300 rounded px-2.5 py-1.5 text-sm w-40 focus:outline-none focus:ring-2 focus:ring-indigo-400;
+  }
+}
+
+/* ─── Body ─────────────────────────────────────────────── */
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #e8e8e8;
+}
+
+/* ─── Invoice container ─────────────────────────────────── */
+.invoice {
+  background: #fff;
+  width: 794px;
+  min-height: 1123px;
+  padding: 40px 45px 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+/* ─── Header ────────────────────────────────────────────── */
+.inv-header   { text-align: center; margin-bottom: 6px; }
+.inv-title    { font-size: 22px; font-weight: 800; letter-spacing: 0.04em; color: #111; }
+.inv-reg      { font-size: 11px; color: #444; margin-top: 4px; }
+.inv-address  { font-size: 12px; color: #444; margin-top: 3px; }
+.inv-divider  { border: none; border-top: 2px solid #111; margin: 10px 0 8px; }
+.inv-cashbill { text-align: center; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 14px; }
+
+/* ─── Meta row ──────────────────────────────────────────── */
+.inv-meta       { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.inv-ms         { display: flex; align-items: baseline; gap: 8px; font-size: 13px; font-weight: 700; }
+.inv-ms-value   { border-bottom: 1px solid #333; min-width: 180px; padding-bottom: 2px; font-weight: 400; font-size: 13px; }
+.inv-meta-right { text-align: right; }
+.inv-no-row     { display: flex; align-items: baseline; gap: 8px; justify-content: flex-end; font-size: 13px; font-weight: 700; }
+.inv-no-value   { color: #b00000; font-size: 14px; font-weight: 800; min-width: 70px; }
+.inv-date-row   { display: flex; align-items: baseline; gap: 6px; justify-content: flex-end; font-size: 12px; margin-top: 5px; color: #333; }
+.inv-date-label { font-weight: 700; }
+
+/* ─── Table ─────────────────────────────────────────────── */
+.inv-table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
+
+.inv-table thead tr { background: #3a3a8c; color: #fff; }
+.inv-table thead th {
+  padding: 7px 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  border: 1px solid #3a3a8c;
+  line-height: 1.5;
+}
+.inv-table thead th .zh { font-size: 11px; display: block; margin-bottom: 1px; }
+
+.inv-table td {
+  border: 1px solid #bbb;
+  padding: 0 8px;
+  font-size: 13px;
+  height: 52px;
+  vertical-align: middle;
+}
+.inv-table tbody tr:nth-child(odd) td  { background: #f4f4fc; }
+.inv-table tbody tr:nth-child(even) td { background: #fff; }
+
+.col-no    { width: 36px;  text-align: center; font-size: 11px; color: #555; }
+.col-desc  { width: auto;  text-align: left; }
+.col-qty   { width: 60px;  text-align: center; }
+.col-price { width: 100px; text-align: center; }
+.col-amt   { width: 100px; text-align: right; padding-right: 10px !important; }
+
+.item-text { font-size: 17px; font-weight: 700; color: #111; }
+
+/* ─── Total bar ─────────────────────────────────────────── */
+.inv-total {
+  background: #3a3a8c;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 10px 9px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  border: 1px solid #3a3a8c;
+}
+.inv-total-amount { font-size: 15px; }
+
+/* ─── Footer ────────────────────────────────────────────── */
+.inv-footer-note { font-size: 9px; color: #888; margin-bottom: 28px; }
+.inv-footer-note .zh { font-size: 9px; }
+
+.inv-sigs { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 10px; }
+.inv-sig  { display: flex; flex-direction: column; gap: 5px; width: 42%; }
+.inv-sig-line  { border-top: 1px solid #333; }
+.inv-sig-label { font-size: 9px; color: #555; }
+
+/* ─── Print / PDF ───────────────────────────────────────── */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html, body {
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .no-print { display: none !important; }
+
+  .invoice {
+    box-shadow: none !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    padding: 28px 32px 40px !important;
+  }
+}

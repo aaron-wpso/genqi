@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GenQi Invoice</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #e8e8e8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    gap: 40px;
+  }
+
+  /* ── Controls bar ─────────────────────────────────────────── */
+  .controls {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    align-items: flex-end;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    width: 100%;
+    max-width: 794px;
+  }
+  .controls h3 {
+    width: 100%;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #666;
+    margin-bottom: 4px;
+  }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .field input, .field select {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 13px;
+    width: 160px;
+  }
+  .field input[type="number"] { width: 90px; }
+  .btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-primary { background: #3a3a8c; color: #fff; }
+  .btn-secondary { background: #f0f0f0; color: #333; }
+
+  /* ── Invoice page ─────────────────────────────────────────── */
+  .invoice {
+    background: #fff;
+    width: 794px;
+    min-height: 1123px;
+    padding: 40px 45px 50px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    position: relative;
+  }
+
+  /* Header */
+  .inv-header { text-align: center; margin-bottom: 6px; }
+  .inv-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #111;
+  }
+  .inv-reg {
+    font-size: 11px;
+    color: #444;
+    margin-top: 4px;
+  }
+  .inv-address {
+    font-size: 12px;
+    color: #444;
+    margin-top: 3px;
+  }
+  .inv-divider {
+    border: none;
+    border-top: 2px solid #111;
+    margin: 10px 0 8px;
+  }
+  .inv-cashbill {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+
+  /* Meta row */
+  .inv-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .inv-ms {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .inv-ms-line {
+    border-bottom: 1px solid #333;
+    width: 180px;
+    height: 16px;
+  }
+  .inv-meta-right { text-align: right; }
+  .inv-no-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    justify-content: flex-end;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .inv-no-value {
+    color: #b00000;
+    font-size: 14px;
+    font-weight: 800;
+    min-width: 70px;
+  }
+  .inv-date-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    justify-content: flex-end;
+    font-size: 12px;
+    margin-top: 5px;
+    color: #333;
+  }
+  .inv-date-label { font-weight: 700; }
+
+  /* Table */
+  .inv-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+  }
+  .inv-table thead tr {
+    background: #3a3a8c;
+    color: #fff;
+  }
+  .inv-table thead th {
+    padding: 7px 6px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-align: center;
+    border: 1px solid #3a3a8c;
+    line-height: 1.5;
+  }
+  .inv-table thead th .zh {
+    font-size: 11px;
+    display: block;
+    margin-bottom: 1px;
+  }
+  .inv-table td {
+    border: 1px solid #bbb;
+    padding: 0 8px;
+    font-size: 13px;
+    height: 52px;
+    vertical-align: middle;
+  }
+  .inv-table tbody tr:nth-child(odd) td { background: #f4f4fc; }
+  .inv-table tbody tr:nth-child(even) td { background: #fff; }
+
+  .col-no    { width: 36px;  text-align: center; font-size: 11px; color: #555; }
+  .col-desc  { width: auto;  text-align: left; }
+  .col-qty   { width: 60px;  text-align: center; }
+  .col-price { width: 100px; text-align: center; }
+  .col-amt   { width: 100px; text-align: right; padding-right: 10px; }
+
+  .item-text {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111;
+  }
+
+  /* Total bar */
+  .inv-total {
+    background: #3a3a8c;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 10px 9px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    border: 1px solid #3a3a8c;
+  }
+  .inv-total-amount { font-size: 15px; }
+
+  /* Footer */
+  .inv-footer-note {
+    font-size: 9px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+  .inv-footer-note .zh { font-size: 9px; }
+  .inv-sigs {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 10px;
+  }
+  .inv-sig {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 42%;
+  }
+  .inv-sig-line { border-top: 1px solid #333; }
+  .inv-sig-label { font-size: 9px; color: #555; }
+
+  /* Print / PDF hint */
+  @media print {
+    body { background: none; padding: 0; }
+    .controls { display: none; }
+    .invoice { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Controls ─────────────────────────────────────────────── -->
+<div class="controls">
+  <h3>Edit Invoice</h3>
+
+  <div class="field">
+    <label>SKU</label>
+    <select id="sku" onchange="applySKU()">
+      <option value="full">Full Body — RM 198</option>
+      <option value="half">Half Body — RM 131</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Invoice No.</label>
+    <input id="ctrl-no" type="text" value="000001" oninput="sync()">
+  </div>
+
+  <div class="field">
+    <label>Customer (M/S)</label>
+    <input id="ctrl-ms" type="text" placeholder="Customer name" oninput="sync()">
+  </div>
+
+  <div class="field">
+    <label>Date</label>
+    <input id="ctrl-date" type="date" oninput="sync()">
+  </div>
+
+  <div class="field">
+    <label>Qty</label>
+    <input id="ctrl-qty" type="number" value="1" min="1" oninput="sync()">
+  </div>
+
+  <div class="field">
+    <label>Unit Price (RM)</label>
+    <input id="ctrl-price" type="number" value="198.00" step="0.01" oninput="sync()">
+  </div>
+
+  <div class="field">
+    <label>Item Description</label>
+    <input id="ctrl-desc" type="text" value="GenQi Treatment (Full Body)" oninput="sync()" style="width:240px">
+  </div>
+
+  <div style="display:flex; gap:8px; align-items:flex-end; padding-bottom:1px">
+    <button class="btn btn-secondary" onclick="printInvoice()">🖨 Print / Save PDF</button>
+  </div>
+</div>
+
+<!-- ── Invoice ───────────────────────────────────────────────── -->
+<div class="invoice" id="invoice">
+
+  <div class="inv-header">
+    <div class="inv-title">GENQI WELLNESS CENTRE</div>
+    <div class="inv-reg">202403240826 (003645743-P)</div>
+    <div class="inv-address">No. 4A, Jalan Sri Mujur 3, Taman Sri Mujur, Batu 9, 43200 Cheras, Selangor</div>
+  </div>
+
+  <hr class="inv-divider">
+  <div class="inv-cashbill">CASH BILL</div>
+
+  <div class="inv-meta">
+    <div class="inv-ms">
+      M/S: <div class="inv-ms-line" id="inv-ms-display"></div>
+    </div>
+    <div class="inv-meta-right">
+      <div class="inv-no-row">
+        No. <span class="inv-no-value" id="inv-no-display">000001</span>
+      </div>
+      <div class="inv-date-row">
+        <span class="zh">日期</span>
+        <span class="inv-date-label">/ Date:</span>
+        <span id="inv-date-display"></span>
+      </div>
+    </div>
+  </div>
+
+  <table class="inv-table">
+    <thead>
+      <tr>
+        <th class="col-no">No</th>
+        <th class="col-desc">
+          <span class="zh">摘要</span>
+          PARTICULARS / BUTIR-BUTIR
+        </th>
+        <th class="col-qty">
+          <span class="zh">数量</span>
+          QUANTITY / KUANTITI
+        </th>
+        <th class="col-price">
+          <span class="zh">价格</span>
+          UNIT PRICE / HARGA
+        </th>
+        <th class="col-amt">
+          <span class="zh">银额</span>
+          AMOUNT / NILAI
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-no">1</td>
+        <td class="col-desc"><span class="item-text" id="inv-desc">GenQi Treatment (Full Body)</span></td>
+        <td class="col-qty" id="inv-qty">1</td>
+        <td class="col-price" id="inv-uprice">RM 198.00</td>
+        <td class="col-amt" id="inv-amount"><strong>RM 198.00</strong></td>
+      </tr>
+      <tr><td class="col-no">2</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="col-no">3</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="col-no">4</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="col-no">5</td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div class="inv-total">
+    <span>TOTAL / <span class="zh">总额</span> / JUMLAH</span>
+    <span class="inv-total-amount" id="inv-total">RM 198.00</span>
+  </div>
+
+  <div class="inv-footer-note">
+    <span class="zh">货物出门，恕不退换</span><br>
+    Goods sold are not returnable / Barang yang dijual tidak boleh dikembalikan
+  </div>
+
+  <div class="inv-sigs">
+    <div class="inv-sig">
+      <div class="inv-sig-line"></div>
+      <div class="inv-sig-label">Received by / Terima Oleh / 收货人</div>
+    </div>
+    <div class="inv-sig">
+      <div class="inv-sig-line"></div>
+      <div class="inv-sig-label">Signature / Tandatangan / 经手人</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const skus = {
+    full: { desc: 'GenQi Treatment (Full Body)', price: 198.00 },
+    half: { desc: 'GenQi Treatment (Half Body)', price: 131.00 },
+  };
+
+  // Set today's date on load
+  const today = new Date();
+  document.getElementById('ctrl-date').value = today.toISOString().split('T')[0];
+  sync();
+
+  function applySKU() {
+    const sku = document.getElementById('sku').value;
+    document.getElementById('ctrl-desc').value  = skus[sku].desc;
+    document.getElementById('ctrl-price').value = skus[sku].price.toFixed(2);
+    sync();
+  }
+
+  function fmt(n) { return 'RM ' + parseFloat(n).toFixed(2); }
+
+  function sync() {
+    const no    = document.getElementById('ctrl-no').value.trim();
+    const ms    = document.getElementById('ctrl-ms').value.trim();
+    const dateV = document.getElementById('ctrl-date').value;
+    const qty   = parseInt(document.getElementById('ctrl-qty').value) || 1;
+    const price = parseFloat(document.getElementById('ctrl-price').value) || 0;
+    const desc  = document.getElementById('ctrl-desc').value;
+
+    document.getElementById('inv-no-display').textContent  = no;
+    document.getElementById('inv-ms-display').textContent  = ms;
+    document.getElementById('inv-desc').textContent        = desc;
+    document.getElementById('inv-qty').textContent         = qty;
+    document.getElementById('inv-uprice').textContent      = fmt(price);
+
+    const total = qty * price;
+    document.getElementById('inv-amount').innerHTML = '<strong>' + fmt(total) + '</strong>';
+    document.getElementById('inv-total').textContent = fmt(total);
+
+    if (dateV) {
+      const [y, m, d] = dateV.split('-');
+      document.getElementById('inv-date-display').textContent = `${parseInt(d)}/${parseInt(m)}/${String(y).slice(2)}`;
+    }
+  }
+
+  function printInvoice() {
+    window.print();
+  }
+</script>
+</body>
+</html>
