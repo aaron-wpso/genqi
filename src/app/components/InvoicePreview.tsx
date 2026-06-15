@@ -88,33 +88,35 @@ export default function InvoicePreview({ data }: Props) {
         <span className="inv-total-amount">{fmt(total)}</span>
       </div>
 
-      <div className="inv-footer-note">
-        <span className="zh">货物出门，恕不退换</span><br />
-        Goods sold are not returnable / Barang yang dijual tidak boleh dikembalikan
-      </div>
-
-      <div className="inv-sigs">
-        <div className="inv-sig">
-          {data.receivedByName && (
-            <div className="inv-sig-filled">{data.receivedByName}</div>
-          )}
-          <div className="inv-sig-line" />
-          <div className="inv-sig-label">
-            Received by / Terima Oleh / 收货人
-            {data.receivedByDate && (
-              <span className="inv-sig-date">
-                &nbsp;·&nbsp;{formatDate(data.receivedByDate)}
-              </span>
-            )}
-          </div>
+      <div className="inv-footer">
+        <div className="inv-footer-note">
+          <span className="zh">货物出门，恕不退换</span><br />
+          Goods sold are not returnable / Barang yang dijual tidak boleh dikembalikan
         </div>
-        <div className="inv-sig">
-          {data.signatureDataUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={data.signatureDataUrl} alt="signature" className="inv-sig-img" />
-          )}
-          <div className="inv-sig-line" />
-          <div className="inv-sig-label">Signature / Tandatangan / 经手人</div>
+
+        <div className="inv-sigs">
+          <div className="inv-sig">
+            {data.receivedByName && (
+              <div className="inv-sig-filled">{data.receivedByName}</div>
+            )}
+            <div className="inv-sig-line" />
+            <div className="inv-sig-label">
+              Received by / Terima Oleh / 收货人
+              {data.receivedByDate && (
+                <span className="inv-sig-date">
+                  &nbsp;·&nbsp;{formatDate(data.receivedByDate)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="inv-sig">
+            {data.signatureDataUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={data.signatureDataUrl} alt="signature" className="inv-sig-img" />
+            )}
+            <div className="inv-sig-line" />
+            <div className="inv-sig-label">Signature / Tandatangan / 经手人</div>
+          </div>
         </div>
       </div>
 
