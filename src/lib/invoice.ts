@@ -8,6 +8,9 @@ export interface InvoiceData {
   qty: number;
   unitPrice: number;
   description: string;
+  logoDataUrl: string;
+  receivedByName: string;
+  receivedByDate: string;
 }
 
 export const SKUS: Record<SkuKey, { desc: string; price: number }> = {
@@ -23,6 +26,9 @@ export const DEFAULT_INVOICE: InvoiceData = {
   qty: 1,
   unitPrice: 198.0,
   description: SKUS.full.desc,
+  logoDataUrl: '',
+  receivedByName: '',
+  receivedByDate: '',
 };
 
 export function fmt(n: number): string {

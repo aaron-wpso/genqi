@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import { InvoiceData, SKUS, SkuKey } from '@/lib/invoice';
 
 interface Props {
@@ -9,11 +10,26 @@ interface Props {
 }
 
 export default function InvoiceControls({ data, onChange, onPrint }: Props) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const set = <K extends keyof InvoiceData>(key: K, value: InvoiceData[K]) =>
     onChange({ ...data, [key]: value });
 
   function applySku(key: SkuKey) {
     onChange({ ...data, sku: key, description: SKUS[key].desc, unitPrice: SKUS[key].price });
+  }
+
+  function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => set('logoDataUrl', (ev.target?.result as string) ?? '');
+    reader.readAsDataURL(file);
+  }
+
+  function clearLogo() {
+    set('logoDataUrl', '');
+    if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
   return (
@@ -22,6 +38,7 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
         Edit Invoice
       </h3>
 
+      {/* ── Invoice fields ── */}
       <Field label="SKU">
         <select
           className="input"
@@ -88,10 +105,59 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
         />
       </Field>
 
-      <div className="flex items-end pb-px">
+      {/* ── Divider ── */}
+      <div className="w-full border-t border-gray-100 mt-1" />
+
+      {/* ── Logo upload ── */}
+      <Field label="Logo / Stamp Image">
+        <div className="flex items-center gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleLogoUpload}
+            className="text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-600 hover:file:bg-gray-200 cursor-pointer"
+          />
+          {data.logoDataUrl && (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={data.logoDataUrl} alt="logo preview" className="h-8 w-auto rounded border border-gray-200" />
+              <button
+                onClick={clearLogo}
+                className="text-xs text-red-400 hover:text-red-600"
+                title="Remove logo"
+              >
+                ✕
+              </button>
+            </>
+          )}
+        </div>
+      </Field>
+
+      {/* ── Received by ── */}
+      <Field label="Received By (Name)">
+        <input
+          className="input w-[180px]"
+          placeholder="Name"
+          value={data.receivedByName}
+          onChange={e => set('receivedByName', e.target.value)}
+        />
+      </Field>
+
+      <Field label="Received By (Date)">
+        <input
+          className="input"
+          type="date"
+          value={data.receivedByDate}
+          onChange={e => set('receivedByDate', e.target.value)}
+        />
+      </Field>
+
+      {/* ── Print button ── */}
+      <div className="flex items-end pb-px ml-auto">
         <button
           onClick={onPrint}
-          className="px-4 py-2 rounded bg-gray-100 hover:bg-gray-200 text-sm font-semibold text-gray-700 transition-colors"
+          className="px-4 py-2 rounded bg-[#3a3a8c] hover:bg-[#2e2e70] text-white text-sm font-semibold transition-colors"
         >
           🖨 Print / Save PDF
         </button>
