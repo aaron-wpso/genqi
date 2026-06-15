@@ -1,5 +1,11 @@
 export type SkuKey = 'full' | 'half';
 
+export interface LineItem {
+  description: string;
+  qty: number;
+  unitPrice: number;
+}
+
 export interface InvoiceData {
   sku: SkuKey;
   no: string;
@@ -8,10 +14,13 @@ export interface InvoiceData {
   qty: number;
   unitPrice: number;
   description: string;
+  extraItems: LineItem[];
   signatureDataUrl: string;
   receivedByName: string;
   receivedByDate: string;
 }
+
+export const EMPTY_LINE_ITEM: LineItem = { description: '', qty: 0, unitPrice: 0 };
 
 export const SKUS: Record<SkuKey, { desc: string; price: number }> = {
   full: { desc: 'GenQi Treatment (Full Body)', price: 198.0 },
@@ -26,6 +35,7 @@ export const DEFAULT_INVOICE: InvoiceData = {
   qty: 0,
   unitPrice: 0,
   description: '',
+  extraItems: [EMPTY_LINE_ITEM, EMPTY_LINE_ITEM, EMPTY_LINE_ITEM, EMPTY_LINE_ITEM],
   signatureDataUrl: '',
   receivedByName: '',
   receivedByDate: '',

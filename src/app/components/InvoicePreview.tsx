@@ -4,10 +4,9 @@ interface Props {
   data: InvoiceData;
 }
 
-const EMPTY_ROWS = [2, 3, 4, 5];
-
 export default function InvoicePreview({ data }: Props) {
-  const total = data.qty * data.unitPrice;
+  const row1Total = data.qty * data.unitPrice;
+  const total = row1Total + data.extraItems.reduce((sum, item) => sum + item.qty * item.unitPrice, 0);
 
   return (
     <div className="invoice" id="invoice">
@@ -74,12 +73,22 @@ export default function InvoicePreview({ data }: Props) {
               <strong>{total ? fmt(total) : ''}</strong>
             </td>
           </tr>
-          {EMPTY_ROWS.map(n => (
-            <tr key={n}>
-              <td className="col-no">{n}</td>
-              <td></td><td></td><td></td><td></td>
-            </tr>
-          ))}
+          {data.extraItems.map((item, i) => {
+            const rowTotal = item.qty * item.unitPrice;
+            return (
+              <tr key={i + 2}>
+                <td className="col-no">{i + 2}</td>
+                <td className="col-desc">
+                  {item.description && <span className="item-text">{item.description}</span>}
+                </td>
+                <td className="col-qty">{item.qty || ''}</td>
+                <td className="col-price">{item.unitPrice ? fmt(item.unitPrice) : ''}</td>
+                <td className="col-amt">
+                  <strong>{rowTotal ? fmt(rowTotal) : ''}</strong>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
