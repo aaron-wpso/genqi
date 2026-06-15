@@ -15,6 +15,7 @@ export interface InvoiceData {
   unitPrice: number;
   description: string;
   extraItems: LineItem[];
+  stampDataUrl: string;
   signatureDataUrl: string;
   receivedByName: string;
   receivedByDate: string;
@@ -36,6 +37,7 @@ export const DEFAULT_INVOICE: InvoiceData = {
   unitPrice: 0,
   description: '',
   extraItems: [EMPTY_LINE_ITEM, EMPTY_LINE_ITEM, EMPTY_LINE_ITEM, EMPTY_LINE_ITEM],
+  stampDataUrl: '',
   signatureDataUrl: '',
   receivedByName: '',
   receivedByDate: '',

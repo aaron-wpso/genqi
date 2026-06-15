@@ -70,7 +70,7 @@ export default function InvoicePreview({ data }: Props) {
             <td className="col-qty">{data.qty || ''}</td>
             <td className="col-price">{data.unitPrice ? fmt(data.unitPrice) : ''}</td>
             <td className="col-amt">
-              <strong>{total ? fmt(total) : ''}</strong>
+              <strong>{row1Total ? fmt(row1Total) : ''}</strong>
             </td>
           </tr>
           {data.extraItems.map((item, i) => {
@@ -103,6 +103,12 @@ export default function InvoicePreview({ data }: Props) {
       </div>
 
       <div className="inv-footer">
+        {data.stampDataUrl && (
+          <div className="inv-stamp-wrap">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={data.stampDataUrl} alt="store stamp" className="inv-stamp" />
+          </div>
+        )}
         <div className="inv-sigs">
           <div className="inv-sig">
             {data.receivedByName && (

@@ -11,6 +11,7 @@ interface Props {
 
 export default function InvoiceControls({ data, onChange, onPrint }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const stampInputRef = useRef<HTMLInputElement>(null);
 
   const set = <K extends keyof InvoiceData>(key: K, value: InvoiceData[K]) =>
     onChange({ ...data, [key]: value });
@@ -37,6 +38,19 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
   function clearLogo() {
     set('signatureDataUrl', '');
     if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+
+  function handleStampUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => set('stampDataUrl', (ev.target?.result as string) ?? '');
+    reader.readAsDataURL(file);
+  }
+
+  function clearStamp() {
+    set('stampDataUrl', '');
+    if (stampInputRef.current) stampInputRef.current.value = '';
   }
 
   return (
@@ -136,8 +150,28 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
       {/* ── Divider ── */}
       <div className="w-full border-t border-gray-100 mt-1" />
 
+      {/* ── Stamp image ── */}
+      <Field label="Store Stamp (centre of invoice)">
+        <div className="flex items-center gap-2">
+          <input
+            ref={stampInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleStampUpload}
+            className="text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-600 hover:file:bg-gray-200 cursor-pointer"
+          />
+          {data.stampDataUrl && (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={data.stampDataUrl} alt="stamp preview" className="h-8 w-auto rounded border border-gray-200" />
+              <button onClick={clearStamp} className="text-xs text-red-400 hover:text-red-600" title="Remove">✕</button>
+            </>
+          )}
+        </div>
+      </Field>
+
       {/* ── Signature image ── */}
-      <Field label="Signature Image">
+      <Field label="Authorised Signature Image">
         <div className="flex items-center gap-2">
           <input
             ref={fileInputRef}
