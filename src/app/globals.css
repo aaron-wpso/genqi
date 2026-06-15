@@ -45,7 +45,12 @@ body {
 /* ─── Table ─────────────────────────────────────────────── */
 .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
 
-.inv-table thead tr { background: #3a3a8c; color: #fff; }
+.inv-table thead tr {
+  background: #3a3a8c;
+  color: #fff;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
 .inv-table thead th {
   padding: 7px 6px;
   font-size: 9px;
@@ -64,7 +69,7 @@ body {
   height: 52px;
   vertical-align: middle;
 }
-.inv-table tbody tr:nth-child(odd) td  { background: #f4f4fc; }
+.inv-table tbody tr:nth-child(odd) td  { background: #f4f4fc; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .inv-table tbody tr:nth-child(even) td { background: #fff; }
 
 .col-no    { width: 36px;  text-align: center; font-size: 11px; color: #555; }
@@ -79,6 +84,8 @@ body {
 .inv-total {
   background: #3a3a8c;
   color: #fff;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
   display: flex;
   justify-content: space-between;
   align-items: center;
