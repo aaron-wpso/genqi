@@ -23,12 +23,12 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = ev => set('logoDataUrl', (ev.target?.result as string) ?? '');
+    reader.onload = ev => set('signatureDataUrl', (ev.target?.result as string) ?? '');
     reader.readAsDataURL(file);
   }
 
   function clearLogo() {
-    set('logoDataUrl', '');
+    set('signatureDataUrl', '');
     if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
@@ -109,7 +109,7 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
       <div className="w-full border-t border-gray-100 mt-1" />
 
       {/* ── Logo upload ── */}
-      <Field label="Logo / Stamp Image">
+      <Field label="Signature Image">
         <div className="flex items-center gap-2">
           <input
             ref={fileInputRef}
@@ -118,10 +118,10 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
             onChange={handleLogoUpload}
             className="text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-600 hover:file:bg-gray-200 cursor-pointer"
           />
-          {data.logoDataUrl && (
+          {data.signatureDataUrl && (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={data.logoDataUrl} alt="logo preview" className="h-8 w-auto rounded border border-gray-200" />
+              <img src={data.signatureDataUrl} alt="logo preview" className="h-8 w-auto rounded border border-gray-200" />
               <button
                 onClick={clearLogo}
                 className="text-xs text-red-400 hover:text-red-600"

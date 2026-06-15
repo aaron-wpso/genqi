@@ -13,10 +13,6 @@ export default function InvoicePreview({ data }: Props) {
     <div className="invoice" id="invoice">
 
       <div className="inv-header">
-        {data.logoDataUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={data.logoDataUrl} alt="logo" className="inv-logo" />
-        )}
         <div className="inv-title">GENQI WELLNESS CENTRE</div>
         <div className="inv-reg">202403240826 (003645743-P)</div>
         <div className="inv-address">
@@ -113,6 +109,10 @@ export default function InvoicePreview({ data }: Props) {
           </div>
         </div>
         <div className="inv-sig">
+          {data.signatureDataUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={data.signatureDataUrl} alt="signature" className="inv-sig-img" />
+          )}
           <div className="inv-sig-line" />
           <div className="inv-sig-label">Signature / Tandatangan / 经手人</div>
         </div>

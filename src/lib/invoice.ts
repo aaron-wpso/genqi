@@ -8,7 +8,7 @@ export interface InvoiceData {
   qty: number;
   unitPrice: number;
   description: string;
-  logoDataUrl: string;
+  signatureDataUrl: string;
   receivedByName: string;
   receivedByDate: string;
 }
@@ -26,7 +26,7 @@ export const DEFAULT_INVOICE: InvoiceData = {
   qty: 1,
   unitPrice: 198.0,
   description: SKUS.full.desc,
-  logoDataUrl: '',
+  signatureDataUrl: '',
   receivedByName: '',
   receivedByDate: '',
 };
