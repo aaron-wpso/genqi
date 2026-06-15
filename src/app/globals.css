@@ -132,6 +132,17 @@ body {
     background: #fff !important;
     padding: 0 !important;
     margin: 0 !important;
+    width: 100% !important;
+  }
+
+  /* strip all layout wrappers so invoice fills the full A4 width */
+  main, main > * {
+    padding: 0 !important;
+    margin: 0 !important;
+    gap: 0 !important;
+    width: 100% !important;
+    transform: none !important;
+    display: block !important;
   }
 
   .no-print { display: none !important; }
