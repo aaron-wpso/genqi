@@ -11,10 +11,7 @@ export interface InvoiceData {
   no: string;
   customerName: string;
   date: string;
-  qty: number;
-  unitPrice: number;
-  description: string;
-  extraItems: LineItem[];
+  items: LineItem[];
   stampDataUrl: string;
   signatureDataUrl: string;
   receivedByName: string;
@@ -33,10 +30,13 @@ export const DEFAULT_INVOICE: InvoiceData = {
   no: '',
   customerName: '',
   date: '',
-  qty: 0,
-  unitPrice: 0,
-  description: '',
-  extraItems: [EMPTY_LINE_ITEM, EMPTY_LINE_ITEM, EMPTY_LINE_ITEM, EMPTY_LINE_ITEM],
+  items: [
+    EMPTY_LINE_ITEM,
+    EMPTY_LINE_ITEM,
+    EMPTY_LINE_ITEM,
+    EMPTY_LINE_ITEM,
+    EMPTY_LINE_ITEM,
+  ],
   stampDataUrl: '',
   signatureDataUrl: '',
   receivedByName: '',

@@ -5,8 +5,7 @@ interface Props {
 }
 
 export default function InvoicePreview({ data }: Props) {
-  const row1Total = data.qty * data.unitPrice;
-  const total = row1Total + data.extraItems.reduce((sum, item) => sum + item.qty * item.unitPrice, 0);
+  const total = data.items.reduce((sum, item) => sum + item.qty * item.unitPrice, 0);
 
   return (
     <div className="invoice" id="invoice">
@@ -62,22 +61,11 @@ export default function InvoicePreview({ data }: Props) {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="col-no">1</td>
-            <td className="col-desc">
-              <span className="item-text">{data.description}</span>
-            </td>
-            <td className="col-qty">{data.qty || ''}</td>
-            <td className="col-price">{data.unitPrice ? fmt(data.unitPrice) : ''}</td>
-            <td className="col-amt">
-              <strong>{row1Total ? fmt(row1Total) : ''}</strong>
-            </td>
-          </tr>
-          {data.extraItems.map((item, i) => {
+          {data.items.map((item, i) => {
             const rowTotal = item.qty * item.unitPrice;
             return (
-              <tr key={i + 2}>
-                <td className="col-no">{i + 2}</td>
+              <tr key={i}>
+                <td className="col-no">{i + 1}</td>
                 <td className="col-desc">
                   {item.description && <span className="item-text">{item.description}</span>}
                 </td>
