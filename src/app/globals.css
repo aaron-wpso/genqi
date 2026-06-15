@@ -87,10 +87,8 @@ body {
 
 /* ─── Total bar ─────────────────────────────────────────── */
 .inv-total {
-  background: #3a3a8c;
-  color: #fff;
-  print-color-adjust: exact;
-  -webkit-print-color-adjust: exact;
+  background: #fff;
+  color: #111;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -98,9 +96,9 @@ body {
   font-size: 13px;
   font-weight: 700;
   margin-bottom: 24px;
-  border: 1px solid #3a3a8c;
+  border: 1px solid #bbb;
 }
-.inv-total-amount { font-size: 15px; }
+.inv-total-amount { font-size: 15px; color: #111; }
 
 /* ─── Footer ────────────────────────────────────────────── */
 .inv-footer-note { font-size: 13px; color: #888; margin-bottom: 28px; }
