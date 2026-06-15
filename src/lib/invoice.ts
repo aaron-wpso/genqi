@@ -20,12 +20,12 @@ export const SKUS: Record<SkuKey, { desc: string; price: number }> = {
 
 export const DEFAULT_INVOICE: InvoiceData = {
   sku: 'full',
-  no: '000001',
+  no: '',
   customerName: '',
   date: '',
-  qty: 1,
-  unitPrice: 198.0,
-  description: SKUS.full.desc,
+  qty: 0,
+  unitPrice: 0,
+  description: '',
   signatureDataUrl: '',
   receivedByName: '',
   receivedByDate: '',

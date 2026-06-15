@@ -81,8 +81,9 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
           className="input w-[80px]"
           type="number"
           min={1}
-          value={data.qty}
-          onChange={e => set('qty', Math.max(1, parseInt(e.target.value) || 1))}
+          value={data.qty === 0 ? '' : data.qty}
+          onChange={e => set('qty', parseInt(e.target.value) || 0)}
+          placeholder="0"
         />
       </Field>
 
@@ -92,8 +93,9 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
           type="number"
           step="0.01"
           min={0}
-          value={data.unitPrice}
+          value={data.unitPrice === 0 ? '' : data.unitPrice}
           onChange={e => set('unitPrice', parseFloat(e.target.value) || 0)}
+          placeholder="0.00"
         />
       </Field>
 

@@ -68,10 +68,10 @@ export default function InvoicePreview({ data }: Props) {
             <td className="col-desc">
               <span className="item-text">{data.description}</span>
             </td>
-            <td className="col-qty">{data.qty}</td>
-            <td className="col-price">{fmt(data.unitPrice)}</td>
+            <td className="col-qty">{data.qty || ''}</td>
+            <td className="col-price">{data.unitPrice ? fmt(data.unitPrice) : ''}</td>
             <td className="col-amt">
-              <strong>{fmt(total)}</strong>
+              <strong>{total ? fmt(total) : ''}</strong>
             </td>
           </tr>
           {EMPTY_ROWS.map(n => (
@@ -85,7 +85,7 @@ export default function InvoicePreview({ data }: Props) {
 
       <div className="inv-total">
         <span>TOTAL / <span className="zh">总额</span> / JUMLAH</span>
-        <span className="inv-total-amount">{fmt(total)}</span>
+        <span className="inv-total-amount">{total ? fmt(total) : ''}</span>
       </div>
 
       <div className="inv-footer-note">

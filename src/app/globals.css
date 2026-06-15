@@ -41,10 +41,10 @@ body {
 .inv-meta       { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
 .inv-ms         { display: flex; align-items: baseline; gap: 8px; font-size: 13px; font-weight: 700; }
 .inv-ms-value   { border-bottom: 1px solid #333; min-width: 180px; padding-bottom: 2px; font-weight: 400; font-size: 13px; }
-.inv-meta-right { text-align: right; }
-.inv-no-row     { display: flex; align-items: baseline; gap: 8px; justify-content: flex-end; font-size: 13px; font-weight: 700; }
+.inv-meta-right { text-align: left; }
+.inv-no-row     { display: flex; align-items: baseline; gap: 8px; font-size: 13px; font-weight: 700; }
 .inv-no-value   { color: #b00000; font-size: 14px; font-weight: 800; min-width: 70px; }
-.inv-date-row   { display: flex; align-items: baseline; gap: 6px; justify-content: flex-end; font-size: 12px; margin-top: 5px; color: #333; }
+.inv-date-row   { display: flex; align-items: baseline; gap: 6px; font-size: 12px; margin-top: 5px; color: #333; }
 .inv-date-label { font-weight: 700; }
 
 /* ─── Table ─────────────────────────────────────────────── */
@@ -113,6 +113,11 @@ body {
 .inv-sig-filled { font-size: 18px; font-weight: 600; color: #111; padding-bottom: 2px; }
 .inv-sig-date   { font-size: 13px; color: #555; font-weight: 400; }
 .inv-sig-img    { max-height: 64px; max-width: 100%; object-fit: contain; margin-bottom: 4px; }
+
+/* ─── Mobile — controls responsive ─────────────────────── */
+@media (max-width: 640px) {
+  .input { width: 100% !important; }
+}
 
 /* ─── Print / PDF ───────────────────────────────────────── */
 @media print {
