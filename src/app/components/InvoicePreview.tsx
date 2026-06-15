@@ -88,12 +88,12 @@ export default function InvoicePreview({ data }: Props) {
         <span className="inv-total-amount">{fmt(total)}</span>
       </div>
 
-      <div className="inv-footer">
-        <div className="inv-footer-note">
-          <span className="zh">货物出门，恕不退换</span><br />
-          Goods sold are not returnable / Barang yang dijual tidak boleh dikembalikan
-        </div>
+      <div className="inv-footer-note">
+        <span className="zh">货物出门，恕不退换</span><br />
+        Goods sold are not returnable / Barang yang dijual tidak boleh dikembalikan
+      </div>
 
+      <div className="inv-footer">
         <div className="inv-sigs">
           <div className="inv-sig">
             {data.receivedByName && (
