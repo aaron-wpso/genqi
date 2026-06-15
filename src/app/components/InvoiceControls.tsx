@@ -11,7 +11,6 @@ interface Props {
 
 export default function InvoiceControls({ data, onChange, onPrint }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const stampInputRef = useRef<HTMLInputElement>(null);
 
   const set = <K extends keyof InvoiceData>(key: K, value: InvoiceData[K]) =>
     onChange({ ...data, [key]: value });
@@ -38,13 +37,6 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
     reader.readAsDataURL(file);
   }
 
-  function handleStampUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => set('stampDataUrl', (ev.target?.result as string) ?? '');
-    reader.readAsDataURL(file);
-  }
 
   return (
     <div className="no-print bg-white rounded-lg shadow-md px-6 py-4 w-full max-w-[794px] flex flex-wrap gap-x-6 gap-y-3 items-end">
@@ -116,26 +108,6 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
       {/* ── Divider ── */}
       <div className="w-full border-t border-gray-100 mt-1" />
 
-      {/* ── Stamp ── */}
-      <Field label="Store Stamp (centre of invoice)">
-        <div className="flex items-center gap-2">
-          <input
-            ref={stampInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleStampUpload}
-            className="text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-600 hover:file:bg-gray-200 cursor-pointer"
-          />
-          {data.stampDataUrl && (
-            <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={data.stampDataUrl} alt="stamp preview" className="h-8 w-auto rounded border border-gray-200" />
-              <button onClick={() => { set('stampDataUrl', ''); if (stampInputRef.current) stampInputRef.current.value = ''; }} className="text-xs text-red-400 hover:text-red-600">✕</button>
-            </>
-          )}
-        </div>
-      </Field>
-
       {/* ── Signature ── */}
       <Field label="Authorised Signature Image">
         <div className="flex items-center gap-2">
@@ -156,14 +128,15 @@ export default function InvoiceControls({ data, onChange, onPrint }: Props) {
         </div>
       </Field>
 
-      {/* ── Received by ── */}
-      <Field label="Received By (Name)">
-        <input className="input w-[180px]" placeholder="Name" value={data.receivedByName} onChange={e => set('receivedByName', e.target.value)} />
-      </Field>
-
-      <Field label="Received By (Date)">
-        <input className="input" type="date" value={data.receivedByDate} onChange={e => set('receivedByDate', e.target.value)} />
-      </Field>
+      {/* ── Received by — own full-width row ── */}
+      <div className="w-full flex flex-wrap gap-x-6 gap-y-3 items-end border-t border-gray-100 pt-3">
+        <Field label="Received By (Name)">
+          <input className="input w-[220px]" placeholder="Name" value={data.receivedByName} onChange={e => set('receivedByName', e.target.value)} />
+        </Field>
+        <Field label="Received By (Date)">
+          <input className="input" type="date" value={data.receivedByDate} onChange={e => set('receivedByDate', e.target.value)} />
+        </Field>
+      </div>
 
       {/* ── Print ── */}
       <div className="flex items-end pb-px ml-auto">

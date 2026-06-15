@@ -1,4 +1,5 @@
 import { InvoiceData, fmt, formatDate } from '@/lib/invoice';
+import { STORE_STAMP_DATA_URL } from '@/lib/stamp';
 
 interface Props {
   data: InvoiceData;
@@ -91,12 +92,10 @@ export default function InvoicePreview({ data }: Props) {
       </div>
 
       <div className="inv-footer">
-        {data.stampDataUrl && (
-          <div className="inv-stamp-wrap">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={data.stampDataUrl} alt="store stamp" className="inv-stamp" />
-          </div>
-        )}
+        <div className="inv-stamp-wrap">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={STORE_STAMP_DATA_URL} alt="store stamp" className="inv-stamp" />
+        </div>
         <div className="inv-sigs">
           <div className="inv-sig">
             {data.receivedByName && (

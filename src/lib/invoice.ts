@@ -12,7 +12,6 @@ export interface InvoiceData {
   customerName: string;
   date: string;
   items: LineItem[];
-  stampDataUrl: string;
   signatureDataUrl: string;
   receivedByName: string;
   receivedByDate: string;
@@ -37,7 +36,6 @@ export const DEFAULT_INVOICE: InvoiceData = {
     EMPTY_LINE_ITEM,
     EMPTY_LINE_ITEM,
   ],
-  stampDataUrl: '',
   signatureDataUrl: '',
   receivedByName: '',
   receivedByDate: '',
